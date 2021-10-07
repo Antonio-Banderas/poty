@@ -5,13 +5,15 @@ import edu.abl.poty.repositories.PersonRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 public class Persons {
 
     @Autowired
     PersonRepository persons;
 
-    // ------ GET ----- //
+    // ------------------ GET ----------------- //
     @GetMapping("/persons")
     public Iterable<Person> getAllPersons() {
         return persons.findAll();
@@ -22,13 +24,18 @@ public class Persons {
         return persons.findById(id).get();
     }
 
-    // ------ POST ----- //
+    @GetMapping("/persons/")
+    public List<Person> getPersonsByCountry(@RequestParam(value="country") String country) {
+        return persons.findPersonsByCountry(country);
+    }
+
+    // ------------------ POST ----------------- //
     @PostMapping("/persons")
     public Person addPerson(@RequestBody Person newPerson) {
         return persons.save(newPerson);
     }
 
-    // ------ PUT/PATCH ----- //
+    // ------------------ PUT/PATCH ----------------- //
     @PutMapping("/persons/{id}")
     public Person replacePersonByID(@PathVariable Long id, @RequestBody Person newPerson) {
         if (persons.existsById(id)) {
@@ -57,7 +64,7 @@ public class Persons {
         }).orElse("person not found");
     }
 
-    // ------ DELETE ----- //
+    // ------------------ DELETE ----------------- //
     @DeleteMapping("/persons/all")
     public void deleteAllPersons() {
         persons.deleteAll();

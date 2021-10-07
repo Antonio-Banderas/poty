@@ -39,7 +39,4 @@ public class Person {
     @Column // context for the award
     private String context;
 
-
-
-
 }
